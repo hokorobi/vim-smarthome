@@ -28,12 +28,12 @@ function! s:RestoreMark(...)
 endfunction
 
 function! smarthome#home(mode)
-  let curcol = col(".")
+  let curcol = col('.')
   " gravitate towards beginning for wrapped lines
-  if curcol > indent(".") + 2
+  if curcol > indent('.') + 2
     call cursor(0, curcol - 1)
   endif
-  if curcol == 1 || curcol > indent(".") + 1
+  if curcol == 1 || curcol > indent('.') + 1
     if &wrap
       normal! g^
     else
@@ -46,19 +46,19 @@ function! smarthome#home(mode)
       normal! 0
     endif
   endif
-  if a:mode == "v"
+  if a:mode ==# 'v'
     call s:SaveMark('m')
     call setpos("'m", getpos('.'))
     normal! gv`m
     call s:RestoreMark('m')
     delmarks m
   endif
-  return ""
+  return ''
 endfunction
 
 function! smarthome#end(mode)
-  let curcol = col(".")
-  let lastcol = a:mode == "i" ? col("$") : col("$") - 1
+  let curcol = col('.')
+  let lastcol = a:mode ==# 'i' ? col('$') : col('$') - 1
   " gravitate towards ending for wrapped lines
   if curcol < lastcol - 1
     call s:SaveReg()
@@ -77,21 +77,21 @@ function! smarthome#end(mode)
     normal! g_
   endif
   " correct edit mode cursor position, put after current character
-  if a:mode == "i"
+  if a:mode ==# 'i'
     call s:SaveReg()
     normal! yl
     let l:charlen = byteidx(getreg(), 1)
-    call cursor(0, col(".") + l:charlen)
+    call cursor(0, col('.') + l:charlen)
     call s:RestoreReg()
   endif
-  if a:mode == "v"
+  if a:mode ==# 'v'
     call s:SaveMark('m')
     call setpos("'m", getpos('.'))
     normal! gv`m
     call s:RestoreMark('m')
     delmarks m
   endif
-  return ""
+  return ''
 endfunction
 
 let &cpo = s:save_cpo
