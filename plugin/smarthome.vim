@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 if exists('g:loaded_smarthome')
   finish
 endif
@@ -6,6 +8,7 @@ let g:loaded_smarthome = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+" mode() で判定しようと思うと矩形選択が面倒そうなので i, n, v で判定する
 nnoremap <silent> <Plug>(smarthome-home) <Esc>:<C-u>call smarthome#home("n")<CR>
 vnoremap <silent> <Plug>(smarthome-home) <Esc>:<C-u>call smarthome#home("v")<CR>
 inoremap <silent> <Plug>(smarthome-home) <C-r>=smarthome#home("i")<CR>
