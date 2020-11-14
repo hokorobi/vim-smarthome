@@ -27,7 +27,20 @@ function! s:RestoreMark(...)
   call setpos("'" . l:name, s:save_mark)
 endfunction
 
-function! smarthome#home(mode)
+function! s:GetMode()
+  if stridx('vV<c-v>', mode()) > -1
+    let l:mode = 'v'
+  elseif stridx(mode(), 'i') == 0
+    let l:mode = 'i'
+  else
+    let l:mode = 'n'
+  endif
+  return l:mode
+endfunction
+
+function! smarthome#home()
+  let l:mode = s:GetMode()
+
   let curcol = col('.')
   " gravitate towards beginning for wrapped lines
   if curcol > indent('.') + 2
@@ -46,7 +59,7 @@ function! smarthome#home(mode)
       normal! 0
     endif
   endif
-  if a:mode ==# 'v'
+  if l:mode ==# 'v'
     call s:SaveMark('m')
     call setpos("'m", getpos('.'))
     normal! gv`m
@@ -56,9 +69,10 @@ function! smarthome#home(mode)
   return ''
 endfunction
 
-function! smarthome#end(mode)
+function! smarthome#end()
+  let l:mode = s:GetMode()
   let curcol = col('.')
-  let lastcol = a:mode ==# 'i' ? col('$') : col('$') - 1
+  let lastcol = l:mode ==# 'i' ? col('$') : col('$') - 1
   " gravitate towards ending for wrapped lines
   if curcol < lastcol - 1
     call s:SaveReg()
@@ -77,14 +91,14 @@ function! smarthome#end(mode)
     normal! g_
   endif
   " correct edit mode cursor position, put after current character
-  if a:mode ==# 'i'
+  if l:mode ==# 'i'
     call s:SaveReg()
     normal! yl
     let l:charlen = byteidx(getreg(), 1)
     call cursor(0, col('.') + l:charlen)
     call s:RestoreReg()
   endif
-  if a:mode ==# 'v'
+  if l:mode ==# 'v'
     call s:SaveMark('m')
     call setpos("'m", getpos('.'))
     normal! gv`m
