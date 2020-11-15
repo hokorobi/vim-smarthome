@@ -59,14 +59,19 @@ function! smarthome#home()
   return ''
 endfunction
 
+function! s:GetCurCharLen() abort
+  " https://eagletmt.hatenadiary.org/entry/20100623/1277289728
+  let l:curchar = matchstr(getline('.'), '.', col('.') - 1)
+  return byteidx(l:curchar, 1)
+endfunction
+
 function! smarthome#end()
   let l:mode = s:GetMode()
   let curcol = col('.')
   let lastcol = l:mode ==# 'i' ? col('$') : col('$') - 1
   " gravitate towards ending for wrapped lines
   if curcol < lastcol - 1
-    let l:charlen = byteidx(matchstr(getline('.'), '.', col('.') - 1), 1)
-    call cursor(0, curcol + l:charlen)
+    call cursor(0, curcol + s:GetCurCharLen())
   endif
   if curcol < lastcol
     if &wrap
@@ -79,8 +84,7 @@ function! smarthome#end()
   endif
   " correct edit mode cursor position, put after current character
   if l:mode ==# 'i'
-    let l:charlen = byteidx(matchstr(getline('.'), '.', col('.') - 1), 1)
-    call cursor(0, col('.') + l:charlen)
+    call cursor(0, col('.') + s:GetCurCharLen())
     return ''
   endif
   if l:mode ==# 'v'
