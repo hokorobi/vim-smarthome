@@ -5,18 +5,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:SaveReg(...) "{{{
-  let l:name = a:0 ? a:1 : v:register
-  let s:save_reg = [getreg(l:name), getregtype(l:name)]
-endfunction "}}}
-
-function! s:RestoreReg(...) "{{{
-  let l:name = a:0 ? a:1 : v:register
-  if exists('s:save_reg')
-    call setreg(l:name, s:save_reg[0], s:save_reg[1])
-  endif
-endfunction "}}}
-
 function! s:SaveMark(...)
   let l:name = a:0 ? a:1 : 'm'
   let s:save_mark = getpos("'" . l:name)
@@ -75,11 +63,8 @@ function! smarthome#end()
   let lastcol = l:mode ==# 'i' ? col('$') : col('$') - 1
   " gravitate towards ending for wrapped lines
   if curcol < lastcol - 1
-    call s:SaveReg()
-    normal! yl
-    let l:charlen = byteidx(getreg(), 1)
+    let l:charlen = byteidx(matchstr(getline('.'), '.', col('.') - 1), 1)
     call cursor(0, curcol + l:charlen)
-    call s:RestoreReg()
   endif
   if curcol < lastcol
     if &wrap
@@ -92,11 +77,9 @@ function! smarthome#end()
   endif
   " correct edit mode cursor position, put after current character
   if l:mode ==# 'i'
-    call s:SaveReg()
-    normal! yl
-    let l:charlen = byteidx(getreg(), 1)
+    let l:charlen = byteidx(matchstr(getline('.'), '.', col('.') - 1), 1)
     call cursor(0, col('.') + l:charlen)
-    call s:RestoreReg()
+    return ''
   endif
   if l:mode ==# 'v'
     call s:SaveMark('m')
