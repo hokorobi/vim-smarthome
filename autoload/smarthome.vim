@@ -47,13 +47,15 @@ function! smarthome#home()
       normal! 0
     endif
   endif
-  if l:mode ==# 'v'
-    call s:SaveMark('m')
-    call setpos("'m", getpos('.'))
-    normal! gv`m
-    call s:RestoreMark('m')
-    delmarks m
+  if l:mode !=# 'v'
+    return ''
   endif
+
+  call s:SaveMark('m')
+  call setpos("'m", getpos('.'))
+  normal! gv`m
+  call s:RestoreMark('m')
+  delmarks m
   return ''
 endfunction
 
