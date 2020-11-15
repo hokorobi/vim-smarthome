@@ -5,6 +5,11 @@ if exists('g:loaded_smarthome')
 endif
 let g:loaded_smarthome = 1
 
+if !has('patch-8.2.1978')
+  echomsg 'vim-smarthome: Needs Vim 8.2.1978 later.'
+  finish
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
