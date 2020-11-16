@@ -47,16 +47,6 @@ function! smarthome#home()
       normal! 0
     endif
   endif
-  if l:mode !=# 'v'
-    return
-  endif
-
-  call s:SaveMark('m')
-  call setpos("'m", getpos('.'))
-  normal! gv`m
-  call s:RestoreMark('m')
-  delmarks m
-  return
 endfunction
 
 function! s:GetCurCharLen() abort
@@ -86,14 +76,6 @@ function! smarthome#end()
     call cursor(0, col('.') + s:GetCurCharLen())
     return
   endif
-  if l:mode ==# 'v'
-    call s:SaveMark('m')
-    call setpos("'m", getpos('.'))
-    normal! gv`m
-    call s:RestoreMark('m')
-    delmarks m
-  endif
-  return
 endfunction
 
 let &cpo = s:save_cpo
