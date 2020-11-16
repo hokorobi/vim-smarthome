@@ -5,16 +5,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:SaveMark(...)
-  let l:name = a:0 ? a:1 : 'm'
-  let s:save_mark = getpos("'" . l:name)
-endfunction
-
-function! s:RestoreMark(...)
-  let l:name = a:0 ? a:1 : 'm'
-  call setpos("'" . l:name, s:save_mark)
-endfunction
-
 function! s:GetMode()
   if stridx('vV<c-v>', mode()) > -1
     let l:mode = 'v'
