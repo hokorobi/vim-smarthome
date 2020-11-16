@@ -19,12 +19,12 @@ endfunction
 function! smarthome#home()
   let l:mode = s:GetMode()
 
-  let curcol = col('.')
+  let l:curcol = col('.')
   " gravitate towards beginning for wrapped lines
-  if curcol > indent('.') + 2
-    call cursor(0, curcol - 1)
+  if l:curcol > indent('.') + 2
+    call cursor(0, l:curcol - 1)
   endif
-  if curcol == 1 || curcol > indent('.') + 1
+  if l:curcol == 1 || l:curcol > indent('.') + 1
     if &wrap
       normal! g^
     else
@@ -46,13 +46,13 @@ endfunction
 
 function! smarthome#end()
   let l:mode = s:GetMode()
-  let curcol = col('.')
-  let lastcol = l:mode ==# 'i' ? col('$') : col('$') - 1
+  let l:curcol = col('.')
+  let l:lastcol = l:mode ==# 'i' ? col('$') : col('$') - 1
   " gravitate towards ending for wrapped lines
-  if curcol < lastcol - 1
-    call cursor(0, curcol + s:GetCurCharLen())
+  if l:curcol < l:lastcol - 1
+    call cursor(0, l:curcol + s:GetCurCharLen())
   endif
-  if curcol < lastcol
+  if l:curcol < l:lastcol
     if &wrap
       normal! g$
     else
@@ -66,7 +66,7 @@ function! smarthome#end()
   endif
 
   " correct edit mode cursor position, put after current character
-  if col('.') == lastcol - s:GetCurCharLen()
+  if col('.') == l:lastcol - s:GetCurCharLen()
     call cursor(0, col('.') + s:GetCurCharLen())
   endif
 endfunction
