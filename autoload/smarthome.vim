@@ -76,9 +76,8 @@ function! smarthome#end()
   endif
 
   " correct edit mode cursor position, put after current character
-  if col('.') == lastcol -1
+  if col('.') == lastcol - s:GetCurCharLen()
     call cursor(0, col('.') + s:GetCurCharLen())
-    return
   endif
 endfunction
 
