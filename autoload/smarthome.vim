@@ -47,19 +47,15 @@ endfunction
 function! smarthome#end()
   let l:mode = s:GetMode()
   let l:curcol = col('.')
-  let l:lastcol = l:mode ==# 'i' ? col('$') : col('$') - 1
+  let l:lastcol = col('$')
   " gravitate towards ending for wrapped lines
   if l:curcol < l:lastcol - 1
     call cursor(0, l:curcol + s:GetCurCharLen())
   endif
-  if l:curcol < l:lastcol
-    if &wrap
-      normal! g$
-    else
-      normal! $
-    endif
+  if &wrap
+    normal! g$
   else
-    normal! g_
+    normal! $
   endif
   if l:mode !=# 'i'
     return
