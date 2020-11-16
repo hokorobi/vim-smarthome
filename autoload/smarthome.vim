@@ -44,7 +44,6 @@ function! s:GetCurCharLen() abort
 endfunction
 
 function! smarthome#end()
-  let l:mode = s:GetMode()
   let l:curcol = col('.')
   let l:lastcol = col('$')
 
@@ -57,7 +56,7 @@ function! smarthome#end()
   else
     normal! $
   endif
-  if l:mode !=# 'i'
+  if s:GetMode() !=# 'i'
     return
   endif
 
