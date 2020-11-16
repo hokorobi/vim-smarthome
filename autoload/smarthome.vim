@@ -5,21 +5,9 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:GetMode()
-  if stridx('vV<c-v>', mode()) > -1
-    let l:mode = 'v'
-  elseif stridx(mode(), 'i') == 0
-    let l:mode = 'i'
-  else
-    let l:mode = 'n'
-  endif
-  return l:mode
-endfunction
-
 function! smarthome#home()
-  let l:mode = s:GetMode()
-
   let l:curcol = col('.')
+
   " gravitate towards beginning for wrapped lines
   if l:curcol > indent('.') + 2
     call cursor(0, l:curcol - 1)
@@ -39,6 +27,17 @@ function! smarthome#home()
   endif
 endfunction
 
+function! s:GetMode()
+  if stridx('vV<c-v>', mode()) > -1
+    let l:mode = 'v'
+  elseif stridx(mode(), 'i') == 0
+    let l:mode = 'i'
+  else
+    let l:mode = 'n'
+  endif
+  return l:mode
+endfunction
+
 function! s:GetCurCharLen() abort
   " https://eagletmt.hatenadiary.org/entry/20100623/1277289728
   return matchstr(getline('.'), '.', col('.') - 1)->byteidx(1)
@@ -48,6 +47,7 @@ function! smarthome#end()
   let l:mode = s:GetMode()
   let l:curcol = col('.')
   let l:lastcol = col('$')
+
   " gravitate towards ending for wrapped lines
   if l:curcol < l:lastcol - 1
     call cursor(0, l:curcol + s:GetCurCharLen())
