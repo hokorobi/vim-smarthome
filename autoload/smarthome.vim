@@ -44,12 +44,9 @@ function! s:GetCurCharLen() abort
 endfunction
 
 function! smarthome#end()
-  let l:curcol = col('.')
-  let l:lastcol = col('$')
-
   " gravitate towards ending for wrapped lines
-  if l:curcol < l:lastcol - 1
-    call cursor(0, l:curcol + s:GetCurCharLen())
+  if col('.') < col('$') - 1
+    call cursor(0, col('.') + s:GetCurCharLen())
   endif
   if &wrap
     normal! g$
@@ -61,7 +58,7 @@ function! smarthome#end()
   endif
 
   " correct edit mode cursor position, put after current character
-  if col('.') == l:lastcol - s:GetCurCharLen()
+  if col('.') == col('$') - s:GetCurCharLen()
     call cursor(0, col('.') + s:GetCurCharLen())
   endif
 endfunction
