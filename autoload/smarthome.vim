@@ -28,7 +28,7 @@ function! smarthome#home()
 endfunction
 
 function! s:GetMode()
-  if stridx(mode(), 'i') == 0
+  if mode()[0] ==# 'i'
     return 'i'
   endif
 
