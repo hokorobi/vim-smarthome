@@ -48,7 +48,7 @@ function! smarthome#home()
     endif
   endif
   if l:mode !=# 'v'
-    return ''
+    return
   endif
 
   call s:SaveMark('m')
@@ -56,13 +56,12 @@ function! smarthome#home()
   normal! gv`m
   call s:RestoreMark('m')
   delmarks m
-  return ''
+  return
 endfunction
 
 function! s:GetCurCharLen() abort
   " https://eagletmt.hatenadiary.org/entry/20100623/1277289728
-  let l:curchar = matchstr(getline('.'), '.', col('.') - 1)
-  return byteidx(l:curchar, 1)
+  return matchstr(getline('.'), '.', col('.') - 1)->byteidx(1)
 endfunction
 
 function! smarthome#end()
@@ -85,7 +84,7 @@ function! smarthome#end()
   " correct edit mode cursor position, put after current character
   if l:mode ==# 'i'
     call cursor(0, col('.') + s:GetCurCharLen())
-    return ''
+    return
   endif
   if l:mode ==# 'v'
     call s:SaveMark('m')
@@ -94,7 +93,7 @@ function! smarthome#end()
     call s:RestoreMark('m')
     delmarks m
   endif
-  return ''
+  return
 endfunction
 
 let &cpo = s:save_cpo
