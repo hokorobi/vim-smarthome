@@ -28,14 +28,15 @@ function! smarthome#home()
 endfunction
 
 function! s:GetMode()
-  if stridx('vV<c-v>', mode()) > -1
-    let l:mode = 'v'
-  elseif stridx(mode(), 'i') == 0
-    let l:mode = 'i'
-  else
-    let l:mode = 'n'
+  if stridx(mode(), 'i') == 0
+    return 'i'
   endif
-  return l:mode
+
+  if stridx('vV<c-v>', mode()) > -1
+    return 'v'
+  endif
+
+  return 'n'
 endfunction
 
 function! s:GetCurCharLen() abort
