@@ -71,8 +71,12 @@ function! smarthome#end()
   else
     normal! g_
   endif
+  if l:mode !=# 'i'
+    return
+  endif
+
   " correct edit mode cursor position, put after current character
-  if l:mode ==# 'i' && col('.') == lastcol -1
+  if col('.') == lastcol -1
     call cursor(0, col('.') + s:GetCurCharLen())
     return
   endif
