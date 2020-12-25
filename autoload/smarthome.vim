@@ -42,7 +42,8 @@ function! smarthome#end()
     call cursor(0, col('.') + s:GetCurCharLen())
   endif
   if &wrap
-    normal! g$
+    " To the last non-blank character of the line
+    normal! g_
   else
     normal! $
   endif
