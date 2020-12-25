@@ -27,16 +27,8 @@ function! smarthome#home()
   endif
 endfunction
 
-function! s:GetMode()
-  if mode()[0] ==# 'i'
-    return 'i'
-  endif
-
-  if stridx('vV<c-v>', mode()) > -1
-    return 'v'
-  endif
-
-  return 'n'
+function! s:IsInsertMode()
+  return mode()[0] ==# 'i'
 endfunction
 
 function! s:GetCurCharLen() abort
@@ -54,13 +46,13 @@ function! smarthome#end()
   else
     normal! $
   endif
-  if s:GetMode() !=# 'i'
+  if !s:IsInsertMode()
     return
   endif
 
   " correct edit mode cursor position, put after current character
   if col('.') == col('$') - s:GetCurCharLen()
-    call cursor(0, col('.') + s:GetCurCharLen())
+    call cursor(0, col('$'))
   endif
 endfunction
 
