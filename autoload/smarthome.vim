@@ -33,7 +33,7 @@ endfunction
 
 function! s:GetCurCharLen() abort
   " https://eagletmt.hatenadiary.org/entry/20100623/1277289728
-  return matchstr(getline('.'), '.', col('.') - 1)->byteidx(1)
+  return getline('.')->matchstr('.', col('.') - 1)->byteidx(1)
 endfunction
 
 function! smarthome#end()
