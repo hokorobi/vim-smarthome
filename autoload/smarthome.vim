@@ -41,12 +41,7 @@ function! smarthome#end()
   if col('.') < col('$') - 1
     call cursor(0, col('.') + s:GetCurCharLen())
   endif
-  if &wrap
-    " To the last non-blank character of the line
-    normal! g_
-  else
-    normal! $
-  endif
+  normal! g$
   if !s:IsInsertMode()
     return
   endif
