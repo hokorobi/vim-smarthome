@@ -37,12 +37,11 @@ function! s:GetCurCharLen() abort
 endfunction
 
 function! smarthome#end()
-  if &wrap
-    " To the last non-blank character of the line
-    normal! g$
-  else
-    normal! $
+  " gravitate towards ending for wrapped lines
+  if col('.') < col('$') - 1
+    call cursor(0, col('.') + s:GetCurCharLen())
   endif
+  normal! g$
   if !s:IsInsertMode()
     return
   endif
