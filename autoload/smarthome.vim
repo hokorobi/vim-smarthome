@@ -27,8 +27,16 @@ function! smarthome#home()
   endif
 endfunction
 
-function! s:IsInsertMode()
-  return mode()[0] ==# 'i'
+function! s:GetMode()
+  if mode()[0] ==# 'i'
+    return 'i'
+  endif
+
+  if stridx('vV<c-v>', mode()) > -1
+    return 'v'
+  endif
+
+  return 'n'
 endfunction
 
 function! s:GetCurCharLen() abort
@@ -42,7 +50,13 @@ function! smarthome#end()
     call cursor(0, col('.') + s:GetCurCharLen())
   endif
   normal! g$
-  if !s:IsInsertMode()
+  if s:GetMode() ==# 'v'
+    if getline('.')[col('.')-1] == ''
+      call cursor(0, col('.') - 1)
+    endif
+    return
+  endif
+  if s:GetMode() !=# 'i'
     return
   endif
 
