@@ -28,11 +28,11 @@ function! smarthome#home()
 endfunction
 
 function! s:GetMode()
-  if mode()[0] ==# 'i'
+  if mode() ==# 'i'
     return 'i'
   endif
 
-  if stridx('vV<c-v>', mode()) > -1
+  if stridx('vV', mode()) > -1
     return 'v'
   endif
 
