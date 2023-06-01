@@ -43,24 +43,31 @@ def GetCurCharLen(): number
 enddef
 
 export def End()
-  # gravitate towards ending for wrapped lines
-  if col('.') < col('$') - 1
-    cursor(0, col('.') + GetCurCharLen())
+  const curcol = col('.')
+  const lastcol = GetMode() ==# 'i' ? col('$') : col('$') - 1
+
+  # Gravitate towards ending for wrapped lines
+  if curcol < lastcol - 1
+    cursor(0, curcol + 1)
   endif
-  normal! g$
-  if GetMode() ==# 'v'
-    if getline('.')[col('.') - 1] == ''
-      cursor(0, col('.') - 1)
+  if curcol < lastcol
+    if &wrap
+      normal! g$
+    else
+      normal! $
     endif
-    return
+  else
+    normal! g_
   endif
-  if GetMode() !=# 'i'
+
+  # Correct edit mode cursor position, put after current character
+  if GetMode() ==# 'i'
+    cursor(0, col('.') + GetCurCharLen())
     return
   endif
 
-  # correct edit mode cursor position, put after current character
-  if col('.') == col('$') - GetCurCharLen()
-    cursor(0, col('$'))
+  if GetMode() ==# 'v'
+    normal! msgv`s
   endif
 enddef
 
