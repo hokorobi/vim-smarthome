@@ -32,7 +32,7 @@ function! s:GetMode()
     return 'i'
   endif
 
-  if stridx('vV', mode()) > -1
+  if mode() =~# '^[vV\x16]'
     return 'v'
   endif
 
