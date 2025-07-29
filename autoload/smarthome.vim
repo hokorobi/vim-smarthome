@@ -1,18 +1,16 @@
-" SmartHome and SmartEnd over wrapped lines
-" http://vim.wikia.com/wiki/SmartHome_and_SmartEnd_over_wrapped_lines
-" https://github.com/bootleq/vimrc_human/blob/master/.vimrc
+vim9script
+# SmartHome and SmartEnd over wrapped lines
+# http://vim.wikia.com/wiki/SmartHome_and_SmartEnd_over_wrapped_lines
+# https://github.com/bootleq/vimrc_human/blob/master/.vimrc
 
-let s:save_cpo = &cpo
-set cpo&vim
+export def Home()
+  var curcol = col('.')
 
-function! smarthome#home()
-  let l:curcol = col('.')
-
-  " gravitate towards beginning for wrapped lines
-  if l:curcol > indent('.') + 2
-    call cursor(0, l:curcol - 1)
+  # gravitate towards beginning for wrapped lines
+  if curcol > indent('.') + 2
+    cursor(0, curcol - 1)
   endif
-  if l:curcol == 1 || l:curcol > indent('.') + 1
+  if curcol == 1 || curcol > indent('.') + 1
     if &wrap
       normal! g^
     else
@@ -25,9 +23,9 @@ function! smarthome#home()
       normal! 0
     endif
   endif
-endfunction
+enddef
 
-function! s:GetMode()
+def GetMode(): string
   if mode() ==# 'i'
     return 'i'
   endif
@@ -37,34 +35,33 @@ function! s:GetMode()
   endif
 
   return 'n'
-endfunction
+enddef
 
-function! s:GetCurCharLen() abort
-  " https://eagletmt.hatenadiary.org/entry/20100623/1277289728
+def GetCurCharLen(): number
+  # https://eagletmt.hatenadiary.org/entry/20100623/1277289728
   return getline('.')->matchstr('.', col('.') - 1)->byteidx(1)
-endfunction
+enddef
 
-function! smarthome#end()
-  " gravitate towards ending for wrapped lines
+export def End()
+  # gravitate towards ending for wrapped lines
   if col('.') < col('$') - 1
-    call cursor(0, col('.') + s:GetCurCharLen())
+    cursor(0, col('.') + GetCurCharLen())
   endif
   normal! g$
-  if s:GetMode() ==# 'v'
-    if getline('.')[col('.')-1] == ''
-      call cursor(0, col('.') - 1)
+
+  if GetMode() ==# 'v'
+    if getline('.')[col('.') - 1] == ''
+      cursor(0, col('.') - 1)
     endif
     return
   endif
-  if s:GetMode() !=# 'i'
+
+  if GetMode() !=# 'i'
     return
   endif
 
-  " correct edit mode cursor position, put after current character
-  if col('.') == col('$') - s:GetCurCharLen()
-    call cursor(0, col('$'))
+  # correct edit mode cursor position, put after current character
+  if col('.') == col('$') - GetCurCharLen()
+    cursor(0, col('$'))
   endif
-endfunction
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
+enddef
