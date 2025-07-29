@@ -3,13 +3,30 @@ vim9script
 # http://vim.wikia.com/wiki/SmartHome_and_SmartEnd_over_wrapped_lines
 # https://github.com/bootleq/vimrc_human/blob/master/.vimrc
 
+#  g^: 行が折り返されている場合、画面上の最初の非空白文字に移動。
+#      行が折り返されていない場合、画面上の一番左側にある非空白文字に移動。（使わない）
+#  ^:  行の最初の非空白文字に移動
+#  g0: 行が折り返されている場合、画面上の最初の文字に移動。
+#      行が折り返されていない場合、画面上の一番左側の文字に移動。（使わない）
+#  0:  行の最初の文字に移動。
+
+# Patterns:
+# * 現在位置→Home() 実行後
+# - 折り返した行の画面上の先頭→画面上の一つ前の行の先頭
+# - 最初の非空白文字、行頭の空白文字の途中→行の先頭
+# - 折り返した行の先頭以外→折り返した行の先頭
+# - 上記以外→最初の非空白文字（行頭にいた（curcol == 1）場合も、最初の非空白文字、インデントがなければそのままなので、これに含まれる）
+
 export def Home()
   var curcol = col('.')
 
   # gravitate towards beginning for wrapped lines
+
+  # 折り返した行の画面上の先頭にいた場合に、画面上の前の行に移動できるように一つ左に移動
   if curcol > indent('.') + 2
     cursor(0, curcol - 1)
   endif
+
   if curcol == 1 || curcol > indent('.') + 1
     if &wrap
       normal! g^
